@@ -13,7 +13,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
     cors: {
-        origin: process.env.FRONTEND_URL || "https://menti-clone-frontend-3.onrender.com/",
+        origin: process.env.FRONTEND_URL || "https://menti-clone-frontend-2.onrender.com/",
         credentials: true
     }
 });
@@ -21,15 +21,15 @@ const io = new Server(server, {
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-    origin: process.env.FRONTEND_URL || "https://menti-clone-frontend-3.onrender.com/",
+    origin: process.env.FRONTEND_URL || "https://menti-clone-frontend-2.onrender.com/",
     credentials: true
 }));
 
 const db = mysql.createPool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_NAME,
+    host: process.env.mysql-21c41bb1-ggits-53e0.k.aivencloud.com,
+    user: process.env.avnadmin,
+    password: process.env.AVNS_o8lQY2UB10CVDD5OZjN,
+    database: process.env.defaultdb,
     waitForConnections: true,
     connectionLimit: 10
 });
