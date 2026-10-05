@@ -13,7 +13,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
     cors: {
-        origin: "https://menti-clone-frontend-2.onrender.com/",
+        origin: "https://menti-clone-frontend-2.onrender.com",
         credentials: true
     }
 });
@@ -21,7 +21,7 @@ const io = new Server(server, {
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-    origin: "https://menti-clone-frontend-2.onrender.com/",
+    origin: "https://menti-clone-frontend-2.onrender.com",
     credentials: true
 }));
 
