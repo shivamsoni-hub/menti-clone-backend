@@ -29,7 +29,7 @@ const db = mysql.createPool({
     host: "mysql-21c41bb1-ggits-53e0.k.aivencloud.com",
     port: 25951,
     user: "avnadmin",
-    password: "YOUR_NEW_PASSWORD",
+    password: "AVNS_o8lQY2UB10CVDD5OZjN",
     database: "defaultdb",
 
     waitForConnections: true,
