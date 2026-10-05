@@ -70,29 +70,65 @@ app.post('/api/auth/register', async (req, res) => {
 app.post('/api/auth/login', async (req, res) => {
     try {
         const { email, password } = req.body;
-        const [users] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
-        if (users.length === 0) return res.status(400).json({ error: 'Invalid credentials' });
 
-        const user = users[0]; // 🔍 MUST BE users[0]
+        const [users] = await db.query(
+            'SELECT * FROM users WHERE email = ?',
+            [email]
+        );
+
+        if (users.length === 0) {
+            return res.status(400).json({
+                error: 'Invalid credentials'
+            });
+        }
+
+        const user = users[0];
+
         const match = await bcrypt.compare(password, user.password);
-        if (!match) return res.status(400).json({ error: 'Invalid credentials' });
 
-        const token = jwt.sign({ id: user.id, email: user.email, name: user.name }, JWT_SECRET, { expiresIn: '7d' });
+        if (!match) {
+            return res.status(400).json({
+                error: 'Invalid credentials'
+            });
+        }
 
-        // Ensure cookie options are explicitly set for localhost development
+        const token = jwt.sign(
+            {
+                id: user.id,
+                email: user.email,
+                name: user.name
+            },
+            JWT_SECRET,
+            {
+                expiresIn: '7d'
+            }
+        );
+
         res.cookie('token', token, {
             httpOnly: true,
-            secure: false, // false for HTTP localhost
-            sameSite: 'lax', // Recommended for cross-port requests
+            secure: true,
+            sameSite: 'none',
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
 
-        res.json({ message: 'Logged in successfully', user: { id: user.id, name: user.name, email: user.email } });
+        res.json({
+            message: 'Logged in successfully',
+            user: {
+                id: user.id,
+                name: user.name,
+                email: user.email
+            }
+        });
+
     } catch (err) {
-        console.error("Login Error:", err);
-        res.status(500).json({ error: 'Login error' });
+        console.error('Login Error:', err);
+
+        res.status(500).json({
+            error: 'Login error'
+        });
     }
 });
+
 
 app.post('/api/auth/logout', (req, res) => {
     res.clearCookie('token');
