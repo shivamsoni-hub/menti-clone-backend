@@ -26,12 +26,18 @@ app.use(cors({
 }));
 
 const db = mysql.createPool({
-    host: process.env.mysql-21c41bb1-ggits-53e0.k.aivencloud.com,
-    user: process.env.avnadmin,
-    password: process.env.AVNS_o8lQY2UB10CVDD5OZjN,
-    database: process.env.defaultdb,
+    host: "mysql-21c41bb1-ggits-53e0.k.aivencloud.com",
+    port: 25951,
+    user: "avnadmin",
+    password: "YOUR_NEW_PASSWORD",
+    database: "defaultdb",
+
     waitForConnections: true,
-    connectionLimit: 10
+    connectionLimit: 10,
+
+    ssl: {
+        rejectUnauthorized: false
+    }
 });
 
 const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret';
