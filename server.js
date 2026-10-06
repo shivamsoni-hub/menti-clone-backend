@@ -12,10 +12,25 @@ const app = express();
 const server = http.createServer(app);
 
 const io = new Server(server, {
-    cors: {
-        origin: "https://menti-clone-frontend-2.onrender.com",
-        credentials: true
-    }
+  cors: {
+    origin: "https://menti-clone-frontend-2.onrender.com",
+    methods: ["GET", "POST"],
+    credentials: true
+  }
+});
+
+io.on("connection", (socket) => {
+  console.log("User connected:", socket.id);
+
+  socket.on("disconnect", () => {
+    console.log("User disconnected:", socket.id);
+  });
+});
+
+const PORT = process.env.PORT || 10000;
+
+server.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server running on port ${PORT}`);
 });
 
 app.use(express.json());
@@ -40,7 +55,7 @@ const db = mysql.createPool({
     }
 });
 
-const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret';
+const JWT_SECRET = '118e1497dbfd48f90ab5b97fd32567b8a7a58f2ff770412a38d2df4f202be5bc';
 
 // --- AUTHENTICATION MIDDLEWARE ---
 const verifyToken = (req, res, next) => {
