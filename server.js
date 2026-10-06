@@ -27,10 +27,10 @@ io.on("connection", (socket) => {
   });
 });
 
-const PORT = process.env.PORT || 10000;
+const PORT2 = process.env.PORT || 10000;
 
-server.listen(PORT, "0.0.0.0", () => {
-  console.log(`Server running on port ${PORT}`);
+server.listen(PORT2, "0.0.0.0", () => {
+  console.log(`Server running on port ${PORT2}`);
 });
 
 app.use(express.json());
