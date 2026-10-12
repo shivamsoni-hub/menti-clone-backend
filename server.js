@@ -109,7 +109,7 @@ app.post('/api/auth/login', async (req, res) => {
     }
 });
 
-app.post('/api/auth/logout', (req, res) => {
+app.get('/api/auth/logout', (req, res) => {
     res.clearCookie('token');
     res.json({ message: 'Logged out successfully' });
 });
