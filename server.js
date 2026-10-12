@@ -114,8 +114,16 @@ app.post('/api/auth/logout', (req, res) => {
     res.json({ message: 'Logged out successfully' });
 });
 
-app.get('/api/auth/me', verifyToken, async (req, res) => {
-    res.json({ user: req.user });
+app.get('/api/auth/me', (req, res) => {
+    const token = req.cookies.token; 
+    if (!token) return res.status(401).json({ error: 'Not authenticated' });
+
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+        res.json({ user: decoded });
+    } catch (err) {
+        res.status(401).json({ error: 'Invalid token' });
+    }
 });
 
 // --- PRESENTATION & SESSION MANAGEMENT APIS ---
