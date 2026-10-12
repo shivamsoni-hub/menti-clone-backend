@@ -40,6 +40,8 @@ app.use(cors({
     credentials: true
 }));
 
+app.set('trust proxy', 1);
+
 const db = mysql.createPool({
     host: "mysql-21c41bb1-ggits-53e0.k.aivencloud.com",
     port: 25951,
@@ -88,17 +90,18 @@ app.post('/api/auth/login', async (req, res) => {
         const [users] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
         if (users.length === 0) return res.status(400).json({ error: 'Invalid credentials' });
 
-        const user = users[0]; // 🔍 MUST BE users[0]
+        const user = users[0];
         const match = await bcrypt.compare(password, user.password);
         if (!match) return res.status(400).json({ error: 'Invalid credentials' });
 
         const token = jwt.sign({ id: user.id, email: user.email, name: user.name }, JWT_SECRET, { expiresIn: '7d' });
 
-        // Ensure cookie options are explicitly set for localhost development
+        const isProduction = process.env.NODE_ENV === 'production';
+
         res.cookie('token', token, {
             httpOnly: true,
-            secure: false, // false for HTTP localhost
-            sameSite: 'lax', // Recommended for cross-port requests
+            secure: isProduction, // true on live HTTPS server, false on localhost
+            sameSite: isProduction ? 'none' : 'lax', // 'none' if frontend & backend are on different domains
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
 
